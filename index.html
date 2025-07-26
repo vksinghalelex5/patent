@@ -1,506 +1,617 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patent Act 1970 Search Tool</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        } 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patent Act 1970 Search Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        } 
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e, #fecfef, #fecfef);
-            min-height: 100vh;
-            padding: 20px;
-        } 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #a855f7 50%, #ec4899 75%, #f97316 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 15s ease infinite;
+        }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        } 
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #a855f7 50%, #ec4899 75%, #f97316 100%); }
+            25% { background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 25%, #ec4899 50%, #f97316 75%, #6366f1 100%); }
+            50% { background: linear-gradient(135deg, #a855f7 0%, #ec4899 25%, #f97316 50%, #6366f1 75%, #8b5cf6 100%); }
+            75% { background: linear-gradient(135deg, #ec4899 0%, #f97316 25%, #6366f1 50%, #8b5cf6 75%, #a855f7 100%); }
+        }
 
-        .search-box {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        } 
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        } 
 
-        .search-box h3 {
-            color: #666;
-            font-size: 18px;
-            font-weight: 400;
-            margin-bottom: 15px;
-        } 
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        } 
 
-        .main-title {
-            text-align: center;
-            margin-bottom: 40px;
-        } 
+        .search-box h3 {
+            color: #374151;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        } 
 
-        .main-title h1 {
-            color: #2c3e50;
-            font-size: 28px;
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 10px;
-        } 
+        .main-title {
+            text-align: center;
+            margin-bottom: 40px;
+        } 
 
-        .input-container {
-            margin: 30px 0;
-        } 
+        .main-title h1 {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        } 
 
-        .input-box {
-            width: 100%;
-            padding: 15px 20px;
-            border: 3px solid #2c3e50;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-            background: white;
-            outline: none;
-            transition: border-color 0.3s ease;
-        } 
+        .input-container {
+            margin: 30px 0;
+            text-align: center;
+        } 
 
-        .input-box:focus {
-            border-color: #ff6b6b;
-        } 
+        .input-box {
+            width: 100%;
+            padding: 18px 25px;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: #374151;
+        } 
 
-        .input-box::placeholder {
-            color: #999;
-            font-size: 16px;
-        } 
+        .input-box:focus {
+            border: 3px solid #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        } 
 
-        .click-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 20px;
-        } 
+        .input-box::placeholder {
+            color: #9ca3af;
+            font-size: 16px;
+        } 
 
-        .click-btn:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
-        } 
+        .click-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        } 
 
-        .click-btn:active {
-            transform: translateY(0);
-        } 
+        .click-btn:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        } 
 
-        .result-section {
-            text-align: center;
-            margin-top: 40px;
-        } 
+        .click-btn:active {
+            transform: translateY(-1px);
+        } 
 
-        .result-title {
-            color: #2c3e50;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        } 
+        .result-section {
+            text-align: center;
+            margin-top: 40px;
+        } 
 
-        .result-content {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            text-align: left;
-        } 
+        .result-title {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        } 
 
-        .result-item {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #ff6b6b;
-        } 
+        .result-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        } 
 
-        .section-number {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 16px;
-        } 
+        .result-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 15px;
+            border-left: 5px solid #6366f1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
 
-        .section-description {
-            color: #555;
-            margin-top: 8px;
-            line-height: 1.4;
-        } 
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-left-color: #8b5cf6;
+        }
 
-        .keywords {
-            color: #666;
-            font-size: 14px;
-            margin-top: 8px;
-            font-style: italic;
-        } 
+        .section-number {
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 18px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        } 
 
-        .suggestion-box {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        } 
+        .section-description {
+            color: #4b5563;
+            margin-top: 10px;
+            line-height: 1.6;
+            font-size: 15px;
+        } 
 
-        .suggestion-title {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 15px;
-        } 
+        .keywords {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 12px;
+            font-style: italic;
+            padding: 8px 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #6366f1;
+        } 
 
-        .keyword-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        } 
+        .suggestion-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        } 
 
-        .keyword-tag {
-            background: #ffe0e0;
-            color: #d32f2f;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        } 
+        .suggestion-title {
+            color: #1f2937;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        } 
 
-        .keyword-tag:hover {
-            background: #ffcdd2;
-        } 
+        .keyword-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        } 
 
-        .error-message {
-            color: #e74c3c;
-            background: rgba(231, 76, 60, 0.1);
-            border: 1px solid #e74c3c;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 20px;
-        } 
+        .keyword-tag {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
+            border: none;
+        } 
 
-        .loading {
-            color: #666;
-            font-style: italic;
-        } 
+        .keyword-tag:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.5);
+        }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px 10px;
-            }
-            
-            .main-title h1 {
-                font-size: 24px;
-            }
-            
-            .input-box {
-                padding: 12px 15px;
-                font-size: 14px;
-            }
-            
-            .click-btn {
-                padding: 12px 30px;
-                font-size: 16px;
-            }
-        }
-    </style>
+        .keyword-tag:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #dc2626;
+            background: linear-gradient(135deg, rgba(254, 226, 226, 0.9), rgba(252, 165, 165, 0.2));
+            border: 2px solid #fca5a5;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
+        } 
+
+        .loading {
+            color: #6b7280;
+            font-style: italic;
+            font-size: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        } 
+
+        /* Enhanced mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .main-title h1 {
+                font-size: 26px;
+            }
+            
+            .input-box {
+                padding: 15px 20px;
+                font-size: 15px;
+            }
+            
+            .click-btn {
+                padding: 15px 35px;
+                font-size: 16px;
+            }
+
+            .keyword-tags {
+                justify-content: center;
+            }
+
+            .keyword-tag {
+                font-size: 13px;
+                padding: 8px 15px;
+            }
+        }
+
+        /* Add some sparkle effects */
+        .search-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7, #ec4899);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(5px);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        /* Floating animation for some elements */
+        .suggestion-box {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="search-box">
-            <h3>Type Keyword to Search Patent Act 1970 Section</h3>
-            <input type="text" id="keywordSearch" class="input-box" placeholder="Search by keywords (e.g., invention, novelty, infringement)" style="margin-top: 15px;">
-            <button onclick="searchFromKeywordBox()" class="click-btn" style="margin-top: 10px; padding: 10px 25px; font-size: 14px;">Search</button>
-        </div> 
+    <div class="container">
+        <div class="search-box">
+            <h3>🔍 Type Keyword to Search Patent Act 1970 Section</h3>
+            <input type="text" id="keywordSearch" class="input-box" placeholder="Search by keywords (e.g., invention, novelty, infringement)" style="margin-top: 15px;">
+            <button onclick="searchFromKeywordBox()" class="click-btn" style="margin-top: 15px; padding: 12px 30px; font-size: 15px;">Search</button>
+        </div> 
 
-        <div class="main-title">
-            <h1>Patent Act 1970 Section Search</h1>
-        </div> 
+        <div class="main-title">
+            <h1>⚖️ Patent Act 1970 Section Search</h1>
+        </div> 
 
-        <div class="input-container">
-            <input type="text" id="sectionInput" class="input-box" placeholder="Enter Section Number or Keyword (e.g., 2, invention, novelty)" maxlength="30">
-            <br>
-            <button onclick="searchSection()" class="click-btn">SEARCH</button>
-        </div> 
+        <div class="input-container">
+            <input type="text" id="sectionInput" class="input-box" placeholder="Enter Section Number or Keyword (e.g., 2, invention, novelty)" maxlength="30">
+            <br>
+            <button onclick="searchSection()" class="click-btn">🚀 SEARCH</button>
+        </div> 
 
-        <div class="suggestion-box">
-            <div class="suggestion-title">Popular Keywords to Search:</div>
-            <div class="keyword-tags">
-                <span class="keyword-tag" onclick="searchKeyword('invention')">invention</span>
-                <span class="keyword-tag" onclick="searchKeyword('novelty')">novelty</span>
-                <span class="keyword-tag" onclick="searchKeyword('infringement')">infringement</span>
-                <span class="keyword-tag" onclick="searchKeyword('prior art')">prior art</span>
-                <span class="keyword-tag" onclick="searchKeyword('application')">application</span>
-                <span class="keyword-tag" onclick="searchKeyword('specification')">specification</span>
-                <span class="keyword-tag" onclick="searchKeyword('claims')">claims</span>
-                <span class="keyword-tag" onclick="searchKeyword('examination')">examination</span>
-                <span class="keyword-tag" onclick="searchKeyword('opposition')">opposition</span>
-                <span class="keyword-tag" onclick="searchKeyword('licensing')">licensing</span>
-                <span class="keyword-tag" onclick="searchKeyword('compulsory license')">compulsory license</span>
-                <span class="keyword-tag" onclick="searchKeyword('revocation')">revocation</span>
-            </div>
-        </div> 
+        <div class="suggestion-box">
+            <div class="suggestion-title">🏷️ Popular Keywords to Search:</div>
+            <div class="keyword-tags">
+                <span class="keyword-tag" onclick="searchKeyword('invention')">invention</span>
+                <span class="keyword-tag" onclick="searchKeyword('novelty')">novelty</span>
+                <span class="keyword-tag" onclick="searchKeyword('infringement')">infringement</span>
+                <span class="keyword-tag" onclick="searchKeyword('prior art')">prior art</span>
+                <span class="keyword-tag" onclick="searchKeyword('application')">application</span>
+                <span class="keyword-tag" onclick="searchKeyword('specification')">specification</span>
+                <span class="keyword-tag" onclick="searchKeyword('claims')">claims</span>
+                <span class="keyword-tag" onclick="searchKeyword('examination')">examination</span>
+                <span class="keyword-tag" onclick="searchKeyword('opposition')">opposition</span>
+                <span class="keyword-tag" onclick="searchKeyword('licensing')">licensing</span>
+                <span class="keyword-tag" onclick="searchKeyword('compulsory license')">compulsory license</span>
+                <span class="keyword-tag" onclick="searchKeyword('revocation')">revocation</span>
+            </div>
+        </div> 
 
-        <div class="result-section">
-            <h2 class="result-title">Patent Act 1970 Sections:</h2>
-            <div id="resultContainer"></div>
-        </div>
-    </div> 
+        <div class="result-section">
+            <h2 class="result-title">📚 Patent Act 1970 Sections:</h2>
+            <div id="resultContainer"></div>
+        </div>
+    </div> 
 
-    <script>
-        // Patent Act 1970 sections with keywords
-        const patentActSections = {
-            "2": {
-                description: "Definitions",
-                keywords: ["definitions", "invention", "patent", "patentee", "prior art", "specification"]
-            },
-            "3": {
-                description: "What are not inventions",
-                keywords: ["not inventions", "exclusions", "discoveries", "scientific principles", "business methods"]
-            },
-            "4": {
-                description: "Inventions relating to atomic energy not patentable",
-                keywords: ["atomic energy", "nuclear", "not patentable", "excluded inventions"]
-            },
-            "5": {
-                description: "Inventions where only methods or processes of manufacture patentable",
-                keywords: ["food", "medicine", "drug", "chemical substances", "processes", "manufacture"]
-            },
-            "6": {
-                description: "Persons entitled to apply for patents",
-                keywords: ["entitled", "apply", "inventor", "assignee", "legal representative"]
-            },
-            "7": {
-                description: "Form of application",
-                keywords: ["form", "application", "filing", "documents", "requirements"]
-            },
-            "8": {
-                description: "Information and undertaking regarding foreign applications",
-                keywords: ["foreign applications", "information", "undertaking", "corresponding patents"]
-            },
-            "9": {
-                description: "Provisional and complete specifications",
-                keywords: ["provisional", "complete", "specifications", "filing", "description"]
-            },
-            "10": {
-                description: "Contents of specifications",
-                keywords: ["contents", "specifications", "description", "claims", "invention"]
-            },
-            "11": {
-                description: "Priority date of claims of complete specification",
-                keywords: ["priority date", "claims", "complete specification", "filing date"]
-            },
-            "12": {
-                description: "Examination of application",
-                keywords: ["examination", "application", "controller", "requirements", "defects"]
-            },
-            "13": {
-                description: "Search for anticipation by previous publication and by prior claim",
-                keywords: ["search", "anticipation", "prior publication", "prior claim", "novelty"]
-            },
-            "14": {
-                description: "Time for putting application in order for grant",
-                keywords: ["time limit", "order", "grant", "compliance", "requirements"]
-            },
-            "15": {
-                description: "Refusal of application",
-                keywords: ["refusal", "application", "grounds", "rejection", "non-compliance"]
-            },
-            "16": {
-                description: "Withdrawal of application",
-                keywords: ["withdrawal", "application", "abandonment", "voluntary"]
-            },
-            "17": {
-                description: "Grant and sealing of patents",
-                keywords: ["grant", "sealing", "patents", "certificate", "registration"]
-            },
-            "18": {
-                description: "Publication of patents granted",
-                keywords: ["publication", "patents granted", "official gazette", "public notice"]
-            },
-            "19": {
-                description: "Right of patentee",
-                keywords: ["rights", "patentee", "exclusive", "monopoly", "exploitation"]
-            },
-            "20": {
-                description: "Duration of patents",
-                keywords: ["duration", "term", "twenty years", "expiry", "protection period"]
-            },
-            "25": {
-                description: "Pre-grant opposition",
-                keywords: ["pre-grant", "opposition", "objections", "third party", "challenge"]
-            },
-            "27": {
-                description: "Post-grant opposition",
-                keywords: ["post-grant", "opposition", "revocation", "invalidity", "challenge"]
-            },
-            "48": {
-                description: "Compulsory licenses",
-                keywords: ["compulsory", "licenses", "public interest", "reasonable requirements", "working"]
-            },
-            "64": {
-                description: "Revocation of patents",
-                keywords: ["revocation", "invalidity", "cancellation", "grounds", "nullity"]
-            },
-            "84": {
-                description: "Compulsory license on refusal to grant licenses on reasonable terms",
-                keywords: ["compulsory license", "refusal", "reasonable terms", "abuse", "dominant position"]
-            },
-            "104": {
-                description: "Infringement of patents",
-                keywords: ["infringement", "violation", "unauthorized use", "making", "selling"]
-            },
-            "105": {
-                description: "Right of exclusive licensee to take proceedings against infringement",
-                keywords: ["exclusive licensee", "proceedings", "infringement", "legal action", "remedy"]
-            },
-            "106": {
-                description: "Limitation of suits for infringement",
-                keywords: ["limitation", "suits", "infringement", "time bar", "six years"]
-            },
-            "107": {
-                description: "Remedies for infringement",
-                keywords: ["remedies", "infringement", "injunction", "damages", "account of profits"]
-            },
-            "108": {
-                description: "Remedy in cases of groundless threats of infringement proceedings",
-                keywords: ["groundless threats", "remedy", "malicious", "unjustified", "proceedings"]
-            },
-            "117": {
-                description: "Register of patents",
-                keywords: ["register", "patents", "maintenance", "records", "entries"]
-            },
-            "135": {
-                description: "Offences by companies",
-                keywords: ["offences", "companies", "criminal liability", "directors", "prosecution"]
-            },
-            "140": {
-                description: "Fees",
-                keywords: ["fees", "payment", "application", "renewal", "maintenance"]
-            }
-        }; 
+    <script>
+        // Patent Act 1970 sections with keywords
+        const patentActSections = {
+            "2": {
+                description: "Definitions",
+                keywords: ["definitions", "invention", "patent", "patentee", "prior art", "specification"]
+            },
+            "3": {
+                description: "What are not inventions",
+                keywords: ["not inventions", "exclusions", "discoveries", "scientific principles", "business methods"]
+            },
+            "4": {
+                description: "Inventions relating to atomic energy not patentable",
+                keywords: ["atomic energy", "nuclear", "not patentable", "excluded inventions"]
+            },
+            "5": {
+                description: "Inventions where only methods or processes of manufacture patentable",
+                keywords: ["food", "medicine", "drug", "chemical substances", "processes", "manufacture"]
+            },
+            "6": {
+                description: "Persons entitled to apply for patents",
+                keywords: ["entitled", "apply", "inventor", "assignee", "legal representative"]
+            },
+            "7": {
+                description: "Form of application",
+                keywords: ["form", "application", "filing", "documents", "requirements"]
+            },
+            "8": {
+                description: "Information and undertaking regarding foreign applications",
+                keywords: ["foreign applications", "information", "undertaking", "corresponding patents"]
+            },
+            "9": {
+                description: "Provisional and complete specifications",
+                keywords: ["provisional", "complete", "specifications", "filing", "description"]
+            },
+            "10": {
+                description: "Contents of specifications",
+                keywords: ["contents", "specifications", "description", "claims", "invention"]
+            },
+            "11": {
+                description: "Priority date of claims of complete specification",
+                keywords: ["priority date", "claims", "complete specification", "filing date"]
+            },
+            "12": {
+                description: "Examination of application",
+                keywords: ["examination", "application", "controller", "requirements", "defects"]
+            },
+            "13": {
+                description: "Search for anticipation by previous publication and by prior claim",
+                keywords: ["search", "anticipation", "prior publication", "prior claim", "novelty"]
+            },
+            "14": {
+                description: "Time for putting application in order for grant",
+                keywords: ["time limit", "order", "grant", "compliance", "requirements"]
+            },
+            "15": {
+                description: "Refusal of application",
+                keywords: ["refusal", "application", "grounds", "rejection", "non-compliance"]
+            },
+            "16": {
+                description: "Withdrawal of application",
+                keywords: ["withdrawal", "application", "abandonment", "voluntary"]
+            },
+            "17": {
+                description: "Grant and sealing of patents",
+                keywords: ["grant", "sealing", "patents", "certificate", "registration"]
+            },
+            "18": {
+                description: "Publication of patents granted",
+                keywords: ["publication", "patents granted", "official gazette", "public notice"]
+            },
+            "19": {
+                description: "Right of patentee",
+                keywords: ["rights", "patentee", "exclusive", "monopoly", "exploitation"]
+            },
+            "20": {
+                description: "Duration of patents",
+                keywords: ["duration", "term", "twenty years", "expiry", "protection period"]
+            },
+            "25": {
+                description: "Pre-grant opposition",
+                keywords: ["pre-grant", "opposition", "objections", "third party", "challenge"]
+            },
+            "27": {
+                description: "Post-grant opposition",
+                keywords: ["post-grant", "opposition", "revocation", "invalidity", "challenge"]
+            },
+            "48": {
+                description: "Compulsory licenses",
+                keywords: ["compulsory", "licenses", "public interest", "reasonable requirements", "working"]
+            },
+            "64": {
+                description: "Revocation of patents",
+                keywords: ["revocation", "invalidity", "cancellation", "grounds", "nullity"]
+            },
+            "84": {
+                description: "Compulsory license on refusal to grant licenses on reasonable terms",
+                keywords: ["compulsory license", "refusal", "reasonable terms", "abuse", "dominant position"]
+            },
+            "104": {
+                description: "Infringement of patents",
+                keywords: ["infringement", "violation", "unauthorized use", "making", "selling"]
+            },
+            "105": {
+                description: "Right of exclusive licensee to take proceedings against infringement",
+                keywords: ["exclusive licensee", "proceedings", "infringement", "legal action", "remedy"]
+            },
+            "106": {
+                description: "Limitation of suits for infringement",
+                keywords: ["limitation", "suits", "infringement", "time bar", "six years"]
+            },
+            "107": {
+                description: "Remedies for infringement",
+                keywords: ["remedies", "infringement", "injunction", "damages", "account of profits"]
+            },
+            "108": {
+                description: "Remedy in cases of groundless threats of infringement proceedings",
+                keywords: ["groundless threats", "remedy", "malicious", "unjustified", "proceedings"]
+            },
+            "117": {
+                description: "Register of patents",
+                keywords: ["register", "patents", "maintenance", "records", "entries"]
+            },
+            "135": {
+                description: "Offences by companies",
+                keywords: ["offences", "companies", "criminal liability", "directors", "prosecution"]
+            },
+            "140": {
+                description: "Fees",
+                keywords: ["fees", "payment", "application", "renewal", "maintenance"]
+            }
+        }; 
 
-        // Keyword mapping for search functionality
-        const keywordMapping = {};
-        Object.keys(patentActSections).forEach(section => {
-            patentActSections[section].keywords.forEach(keyword => {
-                if (!keywordMapping[keyword.toLowerCase()]) {
-                    keywordMapping[keyword.toLowerCase()] = [];
-                }
-                keywordMapping[keyword.toLowerCase()].push(section);
-            });
-        }); 
+        // Keyword mapping for search functionality
+        const keywordMapping = {};
+        Object.keys(patentActSections).forEach(section => {
+            patentActSections[section].keywords.forEach(keyword => {
+                if (!keywordMapping[keyword.toLowerCase()]) {
+                    keywordMapping[keyword.toLowerCase()] = [];
+                }
+                keywordMapping[keyword.toLowerCase()].push(section);
+            });
+        }); 
 
-        function searchSection() {
-            const inputSection = document.getElementById('sectionInput').value.trim();
-            const resultContainer = document.getElementById('resultContainer'); 
+        function searchSection() {
+            const inputSection = document.getElementById('sectionInput').value.trim();
+            const resultContainer = document.getElementById('resultContainer'); 
 
-            if (!inputSection) {
-                resultContainer.innerHTML = '<div class="error-message">Please enter a section number or keyword</div>';
-                return;
-            } 
+            if (!inputSection) {
+                resultContainer.innerHTML = '<div class="error-message">⚠️ Please enter a section number or keyword</div>';
+                return;
+            } 
 
-            // Show loading state
-            resultContainer.innerHTML = '<div class="loading">Searching...</div>'; 
+            // Show loading state
+            resultContainer.innerHTML = '<div class="loading">🔍 Searching...</div>'; 
 
-            // Simulate search delay
-            setTimeout(() => {
-                let results = [];
-                const searchTerm = inputSection.toLowerCase(); 
+            // Simulate search delay
+            setTimeout(() => {
+                let results = [];
+                const searchTerm = inputSection.toLowerCase(); 
 
-                // Check if it's a direct section number
-                if (patentActSections[inputSection]) {
-                    results.push({
-                        section: inputSection,
-                        data: patentActSections[inputSection]
-                    });
-                } else {
-                    // Search by keywords
-                    const matchingSections = keywordMapping[searchTerm] || [];
-                    
-                    // Also search for partial keyword matches
-                    Object.keys(keywordMapping).forEach(keyword => {
-                        if (keyword.includes(searchTerm) && !matchingSections.includes(...keywordMapping[keyword])) {
-                            matchingSections.push(...keywordMapping[keyword]);
-                        }
-                    }); 
+                // Check if it's a direct section number
+                if (patentActSections[inputSection]) {
+                    results.push({
+                        section: inputSection,
+                        data: patentActSections[inputSection]
+                    });
+                } else {
+                    // Search by keywords
+                    const matchingSections = keywordMapping[searchTerm] || [];
+                    
+                    // Also search for partial keyword matches
+                    Object.keys(keywordMapping).forEach(keyword => {
+                        if (keyword.includes(searchTerm) && !matchingSections.includes(...keywordMapping[keyword])) {
+                            matchingSections.push(...keywordMapping[keyword]);
+                        }
+                    }); 
 
-                    // Remove duplicates and add to results
-                    [...new Set(matchingSections)].forEach(section => {
-                        results.push({
-                            section: section,
-                            data: patentActSections[section]
-                        });
-                    });
-                } 
+                    // Remove duplicates and add to results
+                    [...new Set(matchingSections)].forEach(section => {
+                        results.push({
+                            section: section,
+                            data: patentActSections[section]
+                        });
+                    });
+                } 
 
-                if (results.length > 0) {
-                    let resultHTML = '<div class="result-content">';
-                    results.forEach(result => {
-                        const keywords = result.data.keywords.join(', ');
-                        resultHTML += `
-                            <div class="result-item">
-                                <div class="section-number">Section ${result.section} - Patent Act 1970</div>
-                                <div class="section-description">${result.data.description}</div>
-                                <div class="keywords"><strong>Keywords:</strong> ${keywords}</div>
-                            </div>
-                        `;
-                    });
-                    resultHTML += '</div>';
-                    resultContainer.innerHTML = resultHTML;
-                } else {
-                    resultContainer.innerHTML = `
-                        <div class="error-message">
-                            No section found for "${inputSection}". 
-                            Try searching with keywords like: invention, novelty, infringement, prior art, application, etc.
-                        </div>
-                    `;
-                }
-            }, 500);
-        } 
+                if (results.length > 0) {
+                    let resultHTML = '<div class="result-content">';
+                    results.forEach(result => {
+                        const keywords = result.data.keywords.join(', ');
+                        resultHTML += `
+                            <div class="result-item">
+                                <div class="section-number">📖 Section ${result.section} - Patent Act 1970</div>
+                                <div class="section-description">${result.data.description}</div>
+                                <div class="keywords"><strong>🏷️ Keywords:</strong> ${keywords}</div>
+                            </div>
+                        `;
+                    });
+                    resultHTML += '</div>';
+                    resultContainer.innerHTML = resultHTML;
+                } else {
+                    resultContainer.innerHTML = `
+                        <div class="error-message">
+                            🚫 No section found for "${inputSection}". 
+                            Try searching with keywords like: invention, novelty, infringement, prior art, application, etc.
+                        </div>
+                    `;
+                }
+            }, 500);
+        } 
 
-        // Allow Enter key to trigger search
-        document.getElementById('sectionInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                searchSection();
-            }
-        }); 
+        // Allow Enter key to trigger search
+        document.getElementById('sectionInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchSection();
+            }
+        }); 
 
-        // Function to search by clicking keyword tags
-        function searchKeyword(keyword) {
-            document.getElementById('sectionInput').value = keyword;
-            searchSection();
-        } 
+        // Function to search by clicking keyword tags
+        function searchKeyword(keyword) {
+            document.getElementById('sectionInput').value = keyword;
+            searchSection();
+        } 
 
-        // Function to search from the top keyword box
-        function searchFromKeywordBox() {
-            const keywordInput = document.getElementById('keywordSearch').value.trim();
-            if (keywordInput) {
-                document.getElementById('sectionInput').value = keywordInput;
-                searchSection();
-                // Scroll to results
-                document.querySelector('.result-section').scrollIntoView({ behavior: 'smooth' });
-            }
-        } 
+        // Function to search from the top keyword box
+        function searchFromKeywordBox() {
+            const keywordInput = document.getElementById('keywordSearch').value.trim();
+            if (keywordInput) {
+                document.getElementById('sectionInput').value = keywordInput;
+                searchSection();
+                // Scroll to results
+                document.querySelector('.result-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        } 
 
-        // Allow Enter key in keyword search box
-        document.getElementById('keywordSearch').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                searchFromKeywordBox();
-            }
-        });
-    </script>
+        // Allow Enter key in keyword search box
+        document.getElementById('keywordSearch').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchFromKeywordBox();
+            }
+        });
+    </script>
 </body>
 </html>
